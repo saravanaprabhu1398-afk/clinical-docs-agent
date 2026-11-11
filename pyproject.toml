@@ -3,10 +3,21 @@ name = "clinical-docs-agent"
 version = "0.1.0"
 description = "Citation-first AI agent over public FDA drug labels"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = ["pydantic>=2"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
+anthropic = ["anthropic"]
+
+[project.scripts]
+ask-label = "clinical_docs_agent.ask:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

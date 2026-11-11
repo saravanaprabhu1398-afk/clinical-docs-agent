@@ -27,6 +27,21 @@ Rebuild the corpus:
 python scripts/fetch_openfda_labels.py          # writes data/raw/*.json (git-ignored) and data/docs/*.md
 ```
 
+## Try it: ask one label a question
+
+The model layer is provider-agnostic: the same code and the same Pydantic output schema run on a free local model (Ollama) or on Claude, chosen by an environment variable.
+
+```bash
+# free, local (default): install Ollama, then
+ollama pull qwen2.5:3b
+uv run python -m clinical_docs_agent.ask metformin "What is the dose adjustment in renal impairment?"
+
+# Claude (needs ANTHROPIC_API_KEY)
+LLM_PROVIDER=anthropic uv run --extra anthropic python -m clinical_docs_agent.ask metformin "What is the dose adjustment in renal impairment?"
+```
+
+Every answer comes back as structured JSON (`answerable`, `answer`, `citations[section, quote]`). Each quote is then checked against the label text, and any quote the model invented is flagged `NOT FOUND in label`. That check is a first, cheap faithfulness signal that the Week 4 evals build on.
+
 ## Architecture (planned)
 
 ```
